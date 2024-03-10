@@ -1,6 +1,8 @@
 package com.dev.restaurantapp.services.implementations;
 
 import com.dev.restaurantapp.entities.User;
+import com.dev.restaurantapp.exceptions.RawCannotBeNull;
+import com.dev.restaurantapp.exceptions.UsernameAlreadyExistsException;
 import com.dev.restaurantapp.repositories.UserRepository;
 import com.dev.restaurantapp.services.interfaces.UserService;
 import lombok.AllArgsConstructor;
@@ -17,7 +19,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User Register(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        try {
+            user.setPassword(encoder.encode(user.getPassword()));
+            return userRepository.save(user);
+        } catch (IllegalArgumentException exception) {
+            throw new RawCannotBeNull(exception.getMessage());
+        } catch (RuntimeException exception) {
+            throw new UsernameAlreadyExistsException(exception.getMessage());
+        }
     }
 }

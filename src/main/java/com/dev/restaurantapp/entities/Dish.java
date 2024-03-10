@@ -22,7 +22,7 @@ public class Dish {
     @Column(name = "price", nullable = false)
     private int price;
 
-    @Column(name = "timeToCook", nullable = false)
+    @Column(name = "time_to_cook", nullable = false)
     private int timeToCook;
 
     @Column(name = "status", nullable = false)

@@ -4,9 +4,7 @@ import com.dev.restaurantapp.entities.Dish;
 import com.dev.restaurantapp.services.interfaces.DishService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +24,23 @@ public class DishController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<Dish> getFullMenu() {
         return dishService.getFullMenu();
+    }
+
+    @PostMapping("/add")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public Dish addDish(@RequestBody Dish dish) {
+        return dishService.addDish(dish);
+    }
+
+    @PutMapping("/update")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public Dish updateDish(@RequestBody Dish dish) {
+        return dishService.updateDish(dish);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public void deleteDish(@PathVariable("id") Long id) {
+        dishService.deleteDish(id);
     }
 }

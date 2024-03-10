@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,22 +27,17 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public Dish findById(Long Id) {
-        return null;
-    }
-
-    @Override
     public Dish addDish(Dish dish) {
-        return null;
+        return dishRepository.save(dish);
     }
 
     @Override
     public Dish updateDish(Dish dish) {
-        return null;
+        return dishRepository.save(dish); // TODO
     }
 
     @Override
     public void deleteDish(Long id) {
-
+        dishRepository.deleteById(id);
     }
 }
