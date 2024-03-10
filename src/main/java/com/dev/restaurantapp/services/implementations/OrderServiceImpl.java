@@ -96,7 +96,12 @@ public class OrderServiceImpl implements OrderService {
                 .isPaid(false)
                 .build();
 
-        kitchenService.cook(order);
+        try {
+            kitchenService.cook(order);
+        } catch (InterruptedException exception) {
+            throw new NoSuchItemInDatabaseException("No value present");
+        }
+
 
         return orderRepository.save(order);
     }
@@ -123,6 +128,9 @@ public class OrderServiceImpl implements OrderService {
             dishes.add(dishId);
             try {
                 return orderRepository.save(Order.builder()
+                        .id(orderId
+
+                        )
                         .username(username)
                         .dishes(dishes)
                         .status(OrderStatus.IN_PROCESS)
@@ -174,6 +182,7 @@ public class OrderServiceImpl implements OrderService {
         if (order.get().getStatus() == OrderStatus.DONE) {
             try {
                 return orderRepository.save(Order.builder()
+                        .id(order.get().getId())
                         .username(username)
                         .dishes(order.get().getDishes())
                         .status(OrderStatus.DONE)
