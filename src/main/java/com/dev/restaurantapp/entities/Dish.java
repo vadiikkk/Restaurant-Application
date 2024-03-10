@@ -2,12 +2,19 @@ package com.dev.restaurantapp.entities;
 
 import com.dev.restaurantapp.enumerable.DishStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "dish")
+@Builder
+@AllArgsConstructor
 public class Dish {
+
+    public Dish() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

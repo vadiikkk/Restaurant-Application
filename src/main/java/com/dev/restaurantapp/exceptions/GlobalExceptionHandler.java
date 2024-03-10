@@ -8,18 +8,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<String> handleUsernameAlreadyExists(UsernameAlreadyExistsException exception) {
+    @ExceptionHandler(NameAlreadyExistsException.class)
+    public ResponseEntity<String> handleUsernameAlreadyExists(NameAlreadyExistsException exception) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler(RawCannotBeNull.class)
-    public ResponseEntity<String> handleNullRaw(RawCannotBeNull exception) {
+    @ExceptionHandler(RawCannotBeNullException.class)
+    public ResponseEntity<String> handleNullRaw(RawCannotBeNullException exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage());
     }
 
+    @ExceptionHandler(NoSuchItemInDatabaseException.class)
+    public ResponseEntity<String> handleNoItemInDatabase(NoSuchItemInDatabaseException exception) {
+        return ResponseEntity
+                .status(HttpStatus.EXPECTATION_FAILED)
+                .body(exception.getMessage());
+    }
 }

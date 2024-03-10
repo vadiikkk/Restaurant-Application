@@ -2,6 +2,9 @@ package com.dev.restaurantapp.services.implementations;
 
 import com.dev.restaurantapp.entities.Dish;
 import com.dev.restaurantapp.enumerable.DishStatus;
+import com.dev.restaurantapp.exceptions.NameAlreadyExistsException;
+import com.dev.restaurantapp.exceptions.NoSuchItemInDatabaseException;
+import com.dev.restaurantapp.exceptions.RawCannotBeNullException;
 import com.dev.restaurantapp.repositories.DishRepository;
 import com.dev.restaurantapp.services.interfaces.DishService;
 import lombok.AllArgsConstructor;
@@ -28,12 +31,37 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public Dish addDish(Dish dish) {
-        return dishRepository.save(dish);
+        try {
+            return dishRepository.save(dish);
+        } catch (IllegalArgumentException exception) {
+            throw new RawCannotBeNullException(exception.getMessage());
+        } catch (RuntimeException exception) {
+            throw new NameAlreadyExistsException(exception.getMessage());
+        }
     }
 
     @Override
     public Dish updateDish(Dish dish) {
-        return dishRepository.save(dish); // TODO
+        Optional<Dish> toChange = dishRepository.findById(dish.getId());
+
+        if (toChange.isEmpty()) {
+            throw new NoSuchItemInDatabaseException("No value present");
+        }
+
+        try {
+            return dishRepository.save(Dish.builder()
+                    .id(toChange.get().getId())
+                    .name(dish.getName())
+                    .quantity(dish.getQuantity())
+                    .price(dish.getPrice())
+                    .dishStatus(dish.getDishStatus())
+                    .build());
+        } catch (IllegalArgumentException exception) {
+            throw new RawCannotBeNullException(exception.getMessage());
+        } catch (RuntimeException exception) {
+            throw new NameAlreadyExistsException(exception.getMessage());
+        }
+
     }
 
     @Override
